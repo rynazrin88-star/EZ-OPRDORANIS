@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyOPR Generator</title>
+    <style>
+        /* ==========================================
+           1. LATAR BELAKANG DENGAN CORAK DIGITAL
+           ========================================== */
+        body {
+            background-color: #06101E;
+            background-image: 
+                linear-gradient(rgba(0, 221, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 221, 255, 0.05) 1px, transparent 1px),
+                radial-gradient(circle at center, #112B43 0%, #06101E 100%);
+            background-size: 40px 40px, 40px 40px, 100% 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        h1, .form-title {
+            color: #00DDFF;
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(0, 221, 255, 0.6), 0 0 30px rgba(0, 119, 194, 0.4);
+        }
+
+        /* ==========================================
+           2. KOTAK UTAMA (GLASSMORPHISM DIGITAL)
+           ========================================== */
+        .form-container {
+            background-color: rgba(11, 25, 44, 0.65);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            width: 100%;
+            max-width: 950px;
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #00DDFF;
+            box-shadow: 0 0 25px rgba(0, 221, 255, 0.25), inset 0 0 15px rgba(0, 221, 255, 0.1);
+        }
+
+        #oprForm {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        /* ==========================================
+           3. KAWALAN INPUT & LABEL
+           ========================================== */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group:nth-child(2),
+        .image-section,
+        .submit-btn {
+            grid-column: span 2;
+        }
+
+        label {
+            color: #C1E7E3;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 0 5px rgba(0, 221, 255, 0.2);
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(0, 221, 255, 0.4);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #06101E;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        /* Styling rules explicitly tailored for the custom select dropdown */
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306101E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+            padding-right: 40px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            background-color: #FFFFFF;
+            border-color: #00DDFF;
+            box-shadow: 0 0 15px rgba(0, 221, 255, 0.6);
+            transform: scale(1.01);
+        }
+
+        /* ==========================================
+           4. BAHAGIAN MUAT NAIK GAMBAR
+           ========================================== */
+        .image-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            background: rgba(0, 173, 181, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px dashed rgba(0, 221, 255, 0.3);
+        }
+
+        .warning-text {
+            color: #FFD369;
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            text-shadow: 0 0 8px rgba(255, 211, 105, 0.3);
+        }
+
+        .upload-block {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(17, 43, 67, 0.5);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 221, 255, 0.1);
+        }
+
+        .custom-upload-btn {
+            background: linear-gradient(135deg, #00ADB5 0%, #0077C2 100%);
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 173, 181, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .custom-upload-btn:hover {
+            background: linear-gradient(135deg, #00DDFF 0%, #0099FF 100%);
+            box-shadow: 0 0 20px rgba(0, 221, 255, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .img-preview {
+            width: 80px;
+            height: 60px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 2px solid #00DDFF;
+            box-shadow: 0 0 8px rgba(0, 221, 255, 0.5);
+            background: #06101E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .img-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ==========================================
+           5. BUTANG GENERATE
+           ========================================== */
+        .submit-btn {
+            background: linear-gradient(90deg, #0077C2, #00DDFF, #0077C2);
+            background-size: 200% auto;
+            color: #06101E;
+            border: none;
+            padding: 18px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px 25px rgba(0, 221, 255, 0.4);
+            transition: all 0.4s ease;
+            margin-top: 15px;
+        }
+
+        .submit-btn:hover {
+            background-position: right center;
+            box-shadow: 0 0 35px rgba(0, 221, 255, 0.8);
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            #oprForm {
+                grid-template-columns: 1fr;
+            }
+            .form-group:nth-child(2),
+            .image-section,
+            .submit-btn {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h1 class="form-title">MyOPR Generator</h1>
+        
+        <form id="oprForm" name="opr-laporan" method="POST" data-netlify="true" enctype="multipart/form-data">
+            
+            <input type="hidden" name="form-name" value="opr-laporan" />
+            
+            <div class="form-group">
+                <label for="namaProgram">Nama program :</label>
+                <input type="text" id="namaProgram" name="namaProgram" required>
+            </div>
+
+            <div class="image-section">
+                <p class="warning-text">Pastikan fail gambar yang dimuat naik dalam format .jpg, .jpeg dan .png sahaja</p>
+                
+                <div class="upload-block">
+                    <button type="button" class="custom-upload-btn" onclick="document.getElementById('gambar1').click()">Pilih gambar 1</button>
+                    <input type="file" id="gambar1" name="gambar1" accept=".jpg, .jpeg, .png" hidden>
+                    <div id="preview1" class="img-preview">Tiada</div>
+                </div>
+
+                <div class="upload-block">
+                    <button type="button" class="custom-upload-btn" onclick="document.getElementById('gambar2').click()">Pilih gambar 2</button>
+                    <input type="file" id="gambar2" name="gambar2" accept=".jpg, .jpeg, .png" hidden>
+                    <div id="preview2" class="img-preview">Tiada</div>
+                </div>
+
+                <div class="upload-block">
+                    <button type="button" class="custom-upload-btn" onclick="document.getElementById('gambar3').click()">Pilih gambar 3</button>
+                    <input type="file" id="gambar3" name="gambar3" accept=".jpg, .jpeg, .png" hidden>
+                    <div id="preview3" class="img-preview">Tiada</div>
+                </div>
+                
+                <div class="upload-block">
+                    <button type="button" class="custom-upload-btn" onclick="document.getElementById('gambar4').click()">Pilih gambar 4</button>
+                    <input type="file" id="gambar4" name="gambar4" accept=".jpg, .jpeg, .png" hidden>
+                    <div id="preview4" class="img-preview">Tiada</div>
+                </div>
+            </div>
+      
+            <div class="form-group">
+                <label for="tarikh">Tarikh:</label>
+                <input type="date" id="tarikh" name="tarikh" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tempat">Tempat:</label>
+                <input type="text" id="tempat" name="tempat" required>
+            </div>
+
+            <div class="form-group">
+                <label for="sasaran">Sasaran:</label>
+                <textarea id="sasaran" name="sasaran" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="objektif">Objektif Program:</label>
+                <textarea id="objektif" name="objektif" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="pengisian">Pengisian Program:</label>
+                <textarea id="pengisian" name="pengisian" rows="4" required placeholder="Nyatakan aktiviti atau tentatif ringkas..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="impak">Impak Program:</label>
+                <textarea id="impak" name="impak" rows="4" required placeholder="Nyatakan kesan atau hasil pencapaian program..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="disediakanOleh">Disediakan Oleh:</label>
+                <input type="text" id="disediakanOleh" name="disediakanOleh" required placeholder="Nama penuh anda...">
+            </div>
+
+            <div class="form-group">
+                <label for="disemakOleh">Disemak Oleh:</label>
+                <select id="disemakOleh" name="disemakOleh" required>
+                    <option value="" disabled selected>-- Pilih Pemeriksa --</option>
+                    <option value="SALMAH BINTI MOHD">SALMAH BINTI MOHD</option>
+                    <option value="SURAYA BINTI ABD GHAFFAR">SURAYA BINTI ABD GHAFFAR</option>
+                    <option value="MOHD MIZAN BIN ADENAN">MOHD MIZAN BIN ADENAN</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">Generate Report</button>
+        </form>
+    </div>
+
+    <script>
+        // 1. IMAGE PREVIEW SCRIPT
+        function setupImagePreview(inputId, previewId) {
+            const fileInput = document.getElementById(inputId);
+            const previewContainer = document.getElementById(previewId);
+
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    previewContainer.innerHTML = 'Tiada';
+                }
+            });
+        }
+
+        setupImagePreview('gambar1', 'preview1');
+        setupImagePreview('gambar2', 'preview2');
+        setupImagePreview('gambar3', 'preview3');
+        setupImagePreview('gambar4', 'preview4');
+
+        // 2. HELPER TO CONVERT IMAGE TO BASE64
+        function getBase64(file) {
+            return new Promise((resolve, reject) => {
+                if (!file) {
+                    resolve('https://via.placeholder.com/300x400?text=Tiada+Gambar');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // 3. HANDLE FORM SUBMISSION AND GENERATE REPORT
+        document.getElementById('oprForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // --- NETLIFY BACKGROUND SUBMISSION SCRIPT ---
+            // This secretly sends the data to Netlify while the PDF is loading
+            const formElement = document.getElementById('oprForm');
+            fetch('/', {
+                method: 'POST',
+                body: new FormData(formElement)
+            }).then(() => {
+                console.log('Form data sent to Netlify successfully');
+            }).catch((error) => {
+                console.error('Error sending to Netlify:', error);
+            });
+            // --------------------------------------------
+
+            // Ambil data teks
+            const data = {
+                namaProgram: document.getElementById('namaProgram').value,
+                tarikh: document.getElementById('tarikh').value,
+                tempat: document.getElementById('tempat').value,
+                sasaran: document.getElementById('sasaran').value,
+                objektif: document.getElementById('objektif').value,
+                pengisianProgram: document.getElementById('pengisian').value,
+                impakProgram: document.getElementById('impak').value,
+                penyediaNama: document.getElementById('disediakanOleh').value,
+                pemeriksaNama: document.getElementById('disemakOleh').value,
+                kekuatan: '-', 
+                kekurangan: '-', 
+                intervensi: '-' 
+            };
+
+            // Ambil data gambar
+            const img1 = await getBase64(document.getElementById('gambar1').files[0]);
+            const img2 = await getBase64(document.getElementById('gambar2').files[0]);
+            const img3 = await getBase64(document.getElementById('gambar3').files[0]);
+            const img4 = await getBase64(document.getElementById('gambar4').files[0]);
+
+            // Bina Kod HTML Laporan
+            const reportHTML = `
+            <!DOCTYPE html>
+            <html lang="ms">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Laporan Program - ${data.namaProgram}</title>
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+                    
+                    :root {
+                        --primary: #4A3B75;
+                        --text-dark: #1A1A24;
+                    }
+                    * {
+                        box-sizing: border-box;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                    }
+                    body {
+                        font-family: 'Inter', Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #525659;
+                        color: var(--text-dark);
+                    }
+                    .a4-page {
+                        width: 210mm;
+                        min-height: 297mm;
+                        margin: 20px auto;
+                        background: #FFFFFF;
+                        position: relative;
+                        padding: 30px;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                        overflow: hidden;
+                    }
+                    @page { size: A4 portrait; margin: 0; }
+                    @media print {
+                        body { background-color: transparent; }
+                        .a4-page { margin: 0; box-shadow: none; border: none; }
+                        .print-btn { display: none !important; }
+                    }
+                    .print-btn {
+                        position: fixed;
+                        top: 20px;
+                        right: 30px;
+                        background-color: var(--primary);
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        font-family: 'Inter', sans-serif;
+                        font-size: 14px;
+                        font-weight: 600;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        z-index: 1000;
+                        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                    }
+                    .report-header {
+                        text-align: center;
+                        font-size: 16px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        margin-bottom: 20px;
+                        color: #000;
+                    }
+                    .image-grid {
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 10px;
+                        margin-bottom: 30px;
+                        height: 180px;
+                    }
+                    .img-frame {
+                        flex: 1;
+                        border: 2px solid #E2E8F0;
+                        padding: 4px;
+                        background-color: #F8FAFC;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 4px;
+                    }
+                    .img-frame img {
+                        max-width: 100%;
+                        max-height: 100%;
+                        object-fit: contain;
+                    }
+                    .data-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 11.5px;
+                        line-height: 1.5;
+                        margin-bottom: 250px;
+                        position: relative;
+                        z-index: 10;
+                    }
+                    .data-table th, .data-table td {
+                        padding: 7px 0;
+                        vertical-align: top;
+                    }
+                    .data-table th {
+                        width: 130px;
+                        text-align: left;
+                        font-weight: 700;
+                    }
+                    .data-table .colon {
+                        width: 15px;
+                        text-align: center;
+                        font-weight: 700;
+                    }
+                    .data-table td.content {
+                        text-align: justify;
+                    }
+                    .table-spacer {
+                        height: 15px;
+                    }
+                    .footer-wrapper {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 300px;
+                    }
+                    .wave-bg {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        z-index: 1;
+                    }
+                    .signature-container {
+                        position: absolute;
+                        bottom: 50px;
+                        left: 30px;
+                        right: 30px;
+                        display: flex;
+                        justify-content: space-between;
+                        z-index: 10;
+                        font-size: 10.5px;
+                        line-height: 1.4;
+                    }
+                    .sig-block { width: 31%; }
+                    .sig-label { margin-bottom: 50px; color: #000; }
+                    .sig-line {
+                        border-top: 1px dotted #000;
+                        padding-top: 5px;
+                    }
+                    .sig-name { font-weight: 700; color: #000; }
+                    .sig-role { color: #333; }
+                    .system-footnote {
+                        position: absolute;
+                        bottom: 12px;
+                        right: 30px;
+                        font-size: 9px;
+                        font-style: italic;
+                        color: #FFFFFF;
+                        z-index: 10;
+                        opacity: 0.9;
+                    }
+                </style>
+            </head>
+            <body>
+                <button class="print-btn" onclick="window.print()">Cetak / Simpan PDF</button>
+
+                <div class="a4-page">
+                    <div class="report-header">LAPORAN PROGRAM (ONE PAGE REPORT)</div>
+
+                    <div class="image-grid">
+                        <div class="img-frame"><img src="${img1}" alt="Gambar 1"></div>
+                        <div class="img-frame"><img src="${img2}" alt="Gambar 2"></div>
+                        <div class="img-frame"><img src="${img3}" alt="Gambar 3"></div>
+                        <div class="img-frame"><img src="${img4}" alt="Gambar 4"></div>
+                    </div>
+
+                    <table class="data-table">
+                        <tr><th>Nama Program</th><td class="colon">:</td><td class="content">${data.namaProgram}</td></tr>
+                        <tr><th>Tarikh</th><td class="colon">:</td><td class="content">${data.tarikh}</td></tr>
+                        <tr><th>Tempat</th><td class="colon">:</td><td class="content">${data.tempat}</td></tr>
+                        <tr><th>Sasaran</th><td class="colon">:</td><td class="content">${data.sasaran}</td></tr>
+                        <tr><th>Objektif Program</th><td class="colon">:</td><td class="content">${data.objektif}</td></tr>
+                        <tr><td colspan="3" class="table-spacer"></td></tr>
+                        
+                        <tr><th>Pengisian Program</th><td class="colon">:</td><td class="content">${data.pengisianProgram}</td></tr>
+                        
+                        <tr><th>Kekuatan</th><td class="colon">:</td><td class="content">${data.kekuatan}</td></tr>
+                        <tr><th>Kekurangan</th><td class="colon">:</td><td class="content">${data.kekurangan}</td></tr>
+                        <tr><th>Intervensi</th><td class="colon">:</td><td class="content">${data.intervensi}</td></tr>
+                        <tr><th>Impak Program</th><td class="colon">:</td><td class="content">${data.impakProgram}</td></tr>
+                    </table>
+
+                    <div class="footer-wrapper">
+                        <svg class="wave-bg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                            <path fill="#e0c3fc" fill-opacity="0.5" d="M0,256L48,229.3C96,203,192,149,288,154.7C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,197.3C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                            <path fill="#b388eb" fill-opacity="0.6" d="M0,192L48,197.3C96,203,192,213,288,186.7C384,160,480,96,576,101.3C672,107,768,181,864,208C960,235,1056,213,1152,181.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                            <path fill="var(--primary)" d="M0,160L48,176C96,192,192,224,288,218.7C384,213,480,171,576,176C672,181,768,235,864,240C960,245,1056,203,1152,176C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                        </svg>
+
+                        <div class="signature-container">
+                            <div class="sig-block">
+                                <div class="sig-label">Disediakan oleh :</div>
+                                <div class="sig-line">
+                                    <div class="sig-name">${data.penyediaNama}</div>
+                                    <div class="sig-role">GURU SAM SG HJ DORANI</div>
+                                </div>
+                            </div>
+                            
+                            <div class="sig-block">
+                                <div class="sig-label">Disemak oleh :</div>
+                                <div class="sig-line">
+                                    <div class="sig-name">${data.pemeriksaNama}</div>
+                                    <div class="sig-role">PENOLONG KANAN / KETUA BIDANG</div>
+                                </div>
+                            </div>
+
+                            <div class="sig-block">
+                                <div class="sig-label">Disahkan oleh :</div>
+                                <div class="sig-line">
+                                    <div class="sig-name">PUAN SITI KHAINORLIZA BT MOHD NORDIN</div>
+                                    <div class="sig-role">(PENGETUA SAM SUNGAI HAJI DORANI)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="system-footnote">Dijana oleh MyOPR V1.0</div>
+                    </div>
+                </div>
+            </body>
+            </html>
+            `;
+
+            // Buka di tab baru
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(reportHTML);
+            newWindow.document.close();
+        });
+    </script>
+</body>
+</html>
